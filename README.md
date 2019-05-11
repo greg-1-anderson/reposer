@@ -51,7 +51,7 @@ This project provides an experimental command "composer resolve" that aims to cr
 
 ### Alternative
 
-Composer 2 is investigating whether the current solver may continue to be used to produce similar results with less effort by aggressively pruning the data fed into the solver. If their investigation is successful, then the prototype proposed here will not be necessary. If pruning the dependency tree only produces linear improvements on the exponential algorithm, though, then its gains might eventually be overshadowed as the number of dependency-versions used in projects increase over time. This experiment is a contingency against that possibility.
+Composer 2 is investigating whether the current solver may continue to be used to produce similar results with less effort by [aggressively pruning the data fed into the solver](https://github.com/composer/composer/issues/3672). If their investigation is successful, then the prototype proposed here will not be necessary. If pruning the dependency tree only produces linear improvements on the exponential algorithm, though, then its gains might eventually be overshadowed as the number of dependency-versions used in projects increase over time. This experiment is a contingency against that possibility.
 
 ### Proof of Usefulness
 
