@@ -75,7 +75,22 @@ The `composer resolve` command always ignores whatever is in the existing lock f
   - If the new dependency does not have a recorded version, then process it per step 1 (fetch available versions, select the best one, record it, add item to the process list)
 - Repeat step 2 until the process list is empty
 
+### Other Considerations
+
+- Use the existing Packagist API to retrieve project version metadata.
+  - This should probably work. We can’t get composer.lock data from Packagist, but we can get dependency lists w/ version constraints for all versions of any given projects easily.
+  - This will probably give us way too much data, as packagist always gives us all of the versions every time we ask for a project. Will be interesting to see if we still can update with much less memory than `composer update`
+  - We can avoid replacing Packagist for our prototype by providing a simple pass-through "filtering" server that sits in front of Packagist. e.g. we can ask our prototype server to fetch us information only about version x.y.z; the prototype server could in turn ask Packagist for all of the data on the current project and pass through only the requested version, so our prototype tool only sees the data (and spends memory on) the one version it is interested in.
+- Write a composer.lock file that is compatible with the existing Composer lock file format.
+- Install via ‘composer install’
+
+## Future Features
+
+It might not be possible to implement all of the items described below without changing the implementation of `composer install`. The items below are other things that are of interest.
+
 ### Exceptions list:
+
+Purpose: make it easier to "clean up" rules added only to resolve conflicts after said rules are no longer necessary.
 
 - The top-level composer.json (only) may have an exceptions list
 - Items in the exceptions list are treated like require / require-dev items
@@ -84,20 +99,13 @@ The `composer resolve` command always ignores whatever is in the existing lock f
 
 ### Parent projects:
 
+Purpose: provide native support for the capabilities provided by webflo/drupal-core-strict and webflo/drupal-dev-dependencies without requiring the maintenance of parallel projects that make it harder to update.
+
 - The top-level composer.json (only) may declare exactly one dependency to be the “parent project”
 - Before the basic resolver is started, the composer.lock from the parent project is loaded.
 - The exact version of each dependency in that composer.lock is recorded.
 - The basic resolver then continues as usual
 - Optional: if directed, the require-dev from the parent project is added to the require-dev list from the top-level composer.json file
-
-### Stretch goals:
-
-- Use the existing Packagist API to retrieve project version metadata.
-  - This should probably work. We can’t get composer.lock data from Packagist, but we can get dependency lists w/ version constraints for all versions of any given projects easily.
-  - This will probably give us way too much data, as packagist always gives us all of the versions every time we ask for a project. Will be interesting to see if we still can update with much less memory than `composer update`
-  - We can avoid replacing Packagist for our prototype by providing a simple pass-through "filtering" server that sits in front of Packagist. e.g. we can ask our prototype server to fetch us information only about version x.y.z; the prototype server could in turn ask Packagist for all of the data on the current project and pass through only the requested version, so our prototype tool only sees the data (and spends memory on) the one version it is interested in.
-- Write a composer.lock file that is compatible with the existing Composer lock file format.
-- Install via ‘composer install’
 
 ### Security updates:
 
