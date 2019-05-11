@@ -13,13 +13,8 @@ use Composer\Util\Filesystem;
 
 /**
  * Core class of the plugin.
- *
- * Contains the primary logic which determines the files to be fetched and processed.
  */
 class Handler {
-
-  const PRE_COMPOSER_SCAFFOLD_CMD = 'pre-composer-scaffold-cmd';
-  const POST_COMPOSER_SCAFFOLD_CMD = 'post-composer-scaffold-cmd';
 
   /**
    * The Composer service.
@@ -55,7 +50,6 @@ class Handler {
    *   The Composer event.
    */
   public function onPostCmdEvent(Event $event) {
-
   }
 
   /**

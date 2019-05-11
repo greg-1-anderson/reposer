@@ -1,14 +1,20 @@
 ## Goal
 
-Provide a new tool to replace ‘composer update’ and ‘composer require'
+Provide a new tool to replace ‘composer update’ and ‘composer require'.
 
 ### Premise
 
-Composer update usually returns the most recent available version of each dependency that matches the version constraint in the top level composer.json file (or whichever project it is first seen in). We should be able to achieve this same result in a fraction of the time.
+Composer update usually returns the most recent available version of each dependency that matches the version constraint in the top level composer.json file (or whichever project it is first seen in). We should be able to achieve this same result in a fraction of the time with modest memory requirements.
+
+### Prototype
+
+This project provides an experimental command "composer resolve" that aims to create a composer.lock file using a minimum of time and resources. If a lock file cannot be resolved, then an error is printed. The user must add exceptions to the top-level composer.json file to avoid conflicts.
 
 ## Operation
 
-The tool will be packaged as a Composer installer that provides replacement versions for `composer update` and `composer require`.
+The tool will be packaged as a Composer installer that provides a "composer resolve" command to replace "composer update". A more efficient "composer require" may be effected by running the existing command with the `--no-update` flag, and then running "composer resolve".
+
+The "composer resolve" command always ignores whatever is in the existing lock file and vendor directory, and creates a new lock file from scratch every time. No dependencies are ever downloaded. Run "composer install" to download dependencies.
 
 ### Basic resolver algorithm:
 

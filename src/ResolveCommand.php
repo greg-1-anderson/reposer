@@ -7,11 +7,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * The "quick-update" command class.
+ * The command class for "composer resolve".
  *
  * Generate a new composer.lock if we can do so quickly.
  */
-class QuickUpdateCommand extends BaseCommand {
+class ResolveCommand extends BaseCommand {
 
   /**
    * {@inheritdoc}
@@ -19,8 +19,8 @@ class QuickUpdateCommand extends BaseCommand {
   protected function configure() {
     parent::configure();
     $this
-      ->setName('quick-update')
-      ->setDescription('Quickly generate a new lockfile.');
+      ->setName('resolve')
+      ->setDescription('Resolve a canonical lock file.');
   }
 
   /**
@@ -28,7 +28,7 @@ class QuickUpdateCommand extends BaseCommand {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $handler = new Handler($this->getComposer(), $this->getIO());
-    $handler->scaffold();
+    $handler->resolve();
   }
 
 }
