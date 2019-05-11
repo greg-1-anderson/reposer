@@ -16,12 +16,22 @@ Proposal only; no code yet.
     <th>Prototype Equivalent</th>
   </tr>  
   <tr>
-    <td>`$ composer update`</td>
-    <td>`$ composer resolve`<br/>`$composer install`</td>
+    <td><pre>$ composer update
+    </pre>
+    </td>
+    <td><pre>$ composer resolve
+$ composer install</pre>
+    </td>
   </tr>
   <tr>
-    <td>`$ composer require foo/bar`</td>
-    <td>`$ composer require --no-update foo/bar`<br/>`$ composer resolve`<br/>`$composer install`</td>
+    <td><pre>$ composer require foo&#x2F;bar
+    
+</pre>
+    </td>
+    <td><pre>$ composer require --no-update foo&#x2F;bar
+$ composer resolve
+$ composer install</pre>
+</td>
   </tr>
 </table>
 
