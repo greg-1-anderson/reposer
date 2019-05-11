@@ -88,7 +88,11 @@ The `composer resolve` command always ignores whatever is in the existing lock f
 
 It might not be possible to implement all of the items described below without changing the implementation of `composer install`. The items below are other things that are of interest.
 
-### Exceptions list:
+### Partial Updates
+
+The current version of Composer allows partial updates, e.g. `composer update drupal/core --with-dependencies`. The first version of this prototype will only do full updates of all dependencies in the project. If initial results look promising, then partial updates, with and without the `--with-dependencies` flag, will be added.
+
+### Exceptions List
 
 Purpose: make it easier to "clean up" rules added only to resolve conflicts after said rules are no longer necessary.
 
@@ -97,7 +101,7 @@ Purpose: make it easier to "clean up" rules added only to resolve conflicts afte
 - The exceptions list is processed first, before require / require-dev
 - The exceptions list is only documentation that these version constraints only exist to resolve problems caused by dependency constraints that are incompatible with the desires of the top-level project.
 
-### Parent projects:
+### Parent Projects
 
 Purpose: provide native support for the capabilities provided by webflo/drupal-core-strict and webflo/drupal-dev-dependencies without requiring the maintenance of parallel projects that make it harder to update.
 
@@ -107,7 +111,7 @@ Purpose: provide native support for the capabilities provided by webflo/drupal-c
 - The basic resolver then continues as usual
 - Optional: if directed, the require-dev from the parent project is added to the require-dev list from the top-level composer.json file
 
-### Security updates:
+### Security Updates
 
 - How can we identify project versions that are security updates?
 - If this is possible, we should consider a “security update only” feature.
