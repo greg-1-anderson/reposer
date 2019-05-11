@@ -1,0 +1,4 @@
+.idea
+build
+vendor
+tests/fixtures/docroot
