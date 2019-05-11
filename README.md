@@ -12,15 +12,15 @@ The tool will be packaged as a Composer installer that provides replacement vers
 
 ### Basic resolver algorithm:
 
-1. For each dependency (require / require-dev as appropriate) in composer.json:
+- For each dependency (require / require-dev as appropriate) in composer.json:
   - Fetch all available versions for each dependency
   - Take best version from constraints and record it
   - Add dependency to the “process list”
-1. For each item in the “process list”
+- For each item in the “process list”
   - For each dependencies of the dependency (at the recorded version):
   - FAIL if the new dependency has a recorded version that does not match the constraint from the entry in the composer.json file that is being processed. Failure message suggests adding an exception to top-level composer.json.
   - If the new dependency does not have a recorded version, then process it per step 1 (fetch available versions, select the best one, record it, add item to the process list)
-1. Repeat step 2 until the process list is empty
+- Repeat step 2 until the process list is empty
 
 ### Exceptions list:
 
