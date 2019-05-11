@@ -59,7 +59,7 @@ At this point it is unknown what the results will be. Once we have some working 
 
 ## Operation
 
-The tool will be packaged as a Composer installer that provides a `composer resolve` command to replace `composer update`. A more efficient `composer require` may be effected by running the existing command with the `--no-update` flag, and then running `composer resolve`.
+The tool will be packaged as a Composer plugin that provides a `composer resolve` command to replace `composer update`. A more efficient `composer require` may be effected by running the existing command with the `--no-update` flag, and then running `composer resolve`.
 
 The `composer resolve` command always ignores whatever is in the existing lock file and vendor directory, and creates a new lock file from scratch every time. No dependencies are ever downloaded. Run `composer install` to download dependencies.
 
