@@ -1,20 +1,57 @@
 ## Goal
 
-Provide a new tool to replace ‘composer update’ and ‘composer require'.
+Provide a new command `composer resolve` to replace `composer update` and `composer require`.
+
+We aim to be able to update composer lock files (not including download time) using time and memory similar to what is required today fto run `composer install`.
+
+### Status
+
+Proposal only; no code yet.
+
+### Usage
+
+<table>
+  <tr>
+    <th>Current Way</th>
+    <th>Prototype Equivalent</th>
+  </tr>  
+  <tr>
+    <td>`$ composer update`</td>
+    <td>`$ composer resolve`<br/>`$composer install`</td>
+  </tr>
+  <tr>
+    <td>`$ composer require foo/bar`</td>
+    <td>`$ composer require --no-update foo/bar`<br/>`$ composer resolve`<br/>`$composer install`</td>
+  </tr>
+</table>
+
+If the prototype proves to be useful, then a better DX could be provided.
 
 ### Premise
 
 Composer update usually returns the most recent available version of each dependency that matches the version constraint in the top level composer.json file (or whichever project it is first seen in). We should be able to achieve this same result in a fraction of the time with modest memory requirements.
 
+The theory is that a simple algorithm that takes the best matching version from the version constraints specified the first time a given dependency is seen should result in a correct resolution most of the time. If it does not, then maintainers may place exceptions in the top-level composer.json file to help resolve any conflicts. Error messages from failed resolutions may provide hints to help users do this correctly.
+
+The commonly-held belief is that the current solver used in Composer today is necessary in order to to achieve a good set of dependencies. However, even the current implementation has shortcomings, and it is presently very difficult for beginners to work around some of the problems that may be encountered. This prototype aims to discover whether a the more restrictive set of limitations proposed here might still provide an equivalent usability experience with much better performance.
+
 ### Prototype
 
 This project provides an experimental command "composer resolve" that aims to create a composer.lock file using a minimum of time and resources. If a lock file cannot be resolved, then an error is printed. The user must add exceptions to the top-level composer.json file to avoid conflicts.
 
+### Alternative
+
+Composer 2 is investigating whether the current solver may continue to be used to produce similar results with less effort by aggressively pruning the data fed into the solver. If their investigation is successful, then the prototype proposed here will not be necessary. If pruning the dependency tree only produces linear improvements on the exponential algorithm, though, then its gains might eventually be overshadowed as the number of dependency-versions used in projects increase over time. This experiment is a contingency against that possibility.
+
+### Proof of Usefulness
+
+At this point it is unknown what the results will be. Once we have some working code we can take measurements from existing data available in Packagist.
+
 ## Operation
 
-The tool will be packaged as a Composer installer that provides a "composer resolve" command to replace "composer update". A more efficient "composer require" may be effected by running the existing command with the `--no-update` flag, and then running "composer resolve".
+The tool will be packaged as a Composer installer that provides a `composer resolve` command to replace `composer update`. A more efficient `composer require` may be effected by running the existing command with the `--no-update` flag, and then running `composer resolve`.
 
-The "composer resolve" command always ignores whatever is in the existing lock file and vendor directory, and creates a new lock file from scratch every time. No dependencies are ever downloaded. Run "composer install" to download dependencies.
+The `composer resolve` command always ignores whatever is in the existing lock file and vendor directory, and creates a new lock file from scratch every time. No dependencies are ever downloaded. Run `composer install` to download dependencies.
 
 ### Basic resolver algorithm:
 
@@ -48,6 +85,7 @@ The "composer resolve" command always ignores whatever is in the existing lock f
 - Use the existing Packagist API to retrieve project version metadata.
   - This should probably work. We can’t get composer.lock data from Packagist, but we can get dependency lists w/ version constraints for all versions of any given projects easily.
   - This will probably give us way too much data, as packagist always gives us all of the versions every time we ask for a project. Will be interesting to see if we still can update with much less memory than `composer update`
+  - We can avoid replacing Packagist for our prototype by providing a simple pass-through "filtering" server that sits in front of Packagist. e.g. we can ask our prototype server to fetch us information only about version x.y.z; the prototype server could in turn ask Packagist for all of the data on the current project and pass through only the requested version, so our prototype tool only sees the data (and spends memory on) the one version it is interested in.
 - Write a composer.lock file that is compatible with the existing Composer lock file format.
 - Install via ‘composer install’
 
