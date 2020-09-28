@@ -1,3 +1,7 @@
+# ABANDONED
+
+Composer 2 makes this project unnecessary.
+
 ## Goal
 
 Provide a new command `composer resolve` to replace `composer update` and `composer require`.
